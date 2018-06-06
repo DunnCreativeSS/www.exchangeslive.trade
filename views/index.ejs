@@ -1,0 +1,199 @@
+<head>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-8504034781433425",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120452160-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-120452160-1');
+</script>
+
+</head><script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+<div id="container" style="height: 400px; min-width: 310px"></div>
+<form action="/" method="POST">
+<input type="text" id="Input" name="Input" value="Search"/>
+<input type="submit">
+</form>
+<script> 
+$("#Input").autocomplete({
+  source:<%- JSON.stringify(auto) %>,
+  minLength: 2,
+  select: function(event, ui) {
+      event.preventDefault();
+      $("#Input").val(ui.item.label);
+  }
+});
+$( document ).ready(function() {
+    console.log( "ready!" );
+
+setInterval(function(){
+    //chart = Highcharts.stockChart('container', options);
+    $.getJSON('http://35.237.195.221/update?name=<%- name %>', function(jsondata) {
+       chart.series[0].setData((jsondata.poloBuy));
+console.log(jsondata.poloBuy[0]);
+console.log(jsondata.poloBuy[jsondata.poloBuy.length - 1]);
+console.log(jsondata.poloSell[0]);
+console.log(jsondata.poloSell[jsondata.poloSell.length - 1]);
+chart.series[1].setData((jsondata.poloSell));
+chart.series[2].setData((jsondata.poloSellVol));
+chart.series[3].setData((jsondata.poloBuyVol));
+//chart = Highcharts.stockChart('container', options);
+    });
+    }, 5000);
+});
+
+var buy = [],
+sell = [],
+        volBuy = [], volSell = [], i=0;
+var data = <%- JSON.stringify(poloBuy) %>;
+    for (i; i < <%- JSON.stringify(poloBuy) %>.length; i += 1) {
+        buy.push([
+            data[i][0], // the date
+            data[i][1]
+        ]);
+
+        volBuy.push([
+            data[i][0], // the date
+            data[i][2] // the volume
+        ]);
+    }
+i = 0;
+data = <%- JSON.stringify(poloSell) %>;
+   for (i; i < <%- JSON.stringify(poloSell) %>.length; i += 1) {
+        sell.push([
+            data[i][0], // the date
+            data[i][1]         
+        ]);
+
+        volSell.push([
+            data[i][0], // the date
+            data[i][2] // the volume
+        ]);
+    }
+
+var options = {
+
+
+    
+    rangeSelector: {
+        buttons: [{
+            count: 1,
+            type: 'minute',
+            text: '1M'
+        }, {
+            count: 5,
+            type: 'minute',
+            text: '5M'
+        }, {
+            type: 'all',
+            text: 'All'
+        }],
+        inputEnabled: false,
+        selected: 0
+    },
+ 
+
+         title: { 
+             text: '<%- name %>'
+        }, 
+/* events: {
+      load: function() {
+
+    // set up the updating of the chart each second
+    //var series = this.series[0];
+    setInterval(function(){
+    //chart = Highcharts.stockChart('container', options);
+    $.getJSON('http://35.237.195.221/update?name=<%- name %>', function(jsondata) {
+       chart.series[0].setData((jsondata.poloBuy));
+console.log(jsondata.poloBuy[0]);
+console.log(jsondata.poloBuy[jsondata.poloBuy.length - 1]);
+console.log(jsondata.poloSell[0]);
+console.log(jsondata.poloSell[jsondata.poloSell.length - 1]);
+chart.series[1].setData((jsondata.poloSell));
+//chart = Highcharts.stockChart('container', options);
+    });
+    }, 5000);
+   }              
+}, */
+
+        yAxis: [{
+            labels: {
+                align: 'right',
+                x: -3
+            },
+            title: {
+                text: 'Price'
+            },
+            height: '60%',
+            lineWidth: 2,
+            resize: {
+                enabled: true
+            }
+        }, {
+            labels: {
+                align: 'right',
+                x: -3
+            },
+            title: {
+                text: 'Volume'
+            },
+            top: '65%',
+            height: '35%',
+            offset: 0,
+            lineWidth: 2
+        }],
+
+        tooltip: {
+            split: true
+        },
+        series: [{ 
+             name: 'buy', 
+             data: buy, 
+             color: '#00FF00'
+       },
+{ 
+             name: 'sell', 
+             data: sell, 
+              color: '#FF0000'
+       },
+ {
+            type: 'column',
+            name: 'Sell Volume',
+            data: volSell,
+            yAxis: 1,
+ color: '#FF0000'
+},
+ {
+            type: 'column',
+            name: 'Buy Volume',
+            data: volBuy,
+            yAxis: 1,
+ color: '#00FF00'
+}
+]
+}
+
+
+var chart = Highcharts.stockChart('container', options);
+       
+     
+     </script>
+<h1>http://www.exchangeslive.trade/</h1> provides up-to-date snapsshots of 70+ exchanges (through <a href="https://www.coinigy.com/">coinigy API</a>) and shows you those trades that are ACTUALLY executed against the order book. This can be very handy in trying to figure out what real buying and selling pressure there is on a given exchange, vs. orderbooks which are often manipulated with 'fake' orders by bots. This site can help you understand where crypto traders are actually spending money on any given pair on any given exchange, so you can get ahead of the bots and have huge gains.
+<br>
+</br>
+<h2>v2.0</h2>Updates every 5s so long as there's new data :) <br></br>
+<h1>HODL!</h1>
