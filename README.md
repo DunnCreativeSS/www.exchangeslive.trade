@@ -18,3 +18,7 @@ change this line to whichever exchange you want the site to work on:
 if (datachan.startsWith("TRADE-BINA")) {
 
 Note that 'BINA' is short for Binance. To get a list of exchange codes, get your socket to emit to 'exchanges.' Change the above line to 'TRADE-' to work on all exchanges, but keep in mind it doesn't like creating 4000+ socket subscriptions :)
+
+Edit views/index.ejs and change the IP to whatever machine you have app.js running on.
+
+npm the different modules, then sudo node app.js.
