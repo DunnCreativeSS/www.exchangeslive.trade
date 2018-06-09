@@ -11,9 +11,6 @@ function dbsdo(coll, collname){
 	}
 });
 }
-  app.use('/media', express.static(__dirname + '/media'));
-  app.use(express.static(__dirname + '/public'));
-
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
@@ -39,27 +36,21 @@ db.collection(req.query.name).find().toArray((err, result) => {
 
     var result3vol = []
     var result3 = []
-	var len = 1000;
-	if (len > result.length){
-		len = result.length - 1;
-	}
-    for (var i = 0; i <= len; i++){
+    for (var resu in result){
 //console.log(result[resu]);
-try{
-        if (result[i].type == "SELL"){
-        var d =new Date(result[i].timestamp).getTime() 
-        var arr = [d, result[i].price];
+        if (result[resu].type == "SELL"){
+        var d =new Date(result[resu].timestamp).getTime() 
+        var arr = [d, result[resu].price];
         result3.push(arr);
-var arr2 = [d, result[i].quantity];
+var arr2 = [d, result[resu].quantity];
         result3vol.push(arr2);
     }else {
-        var d =new Date(result[i].timestamp).getTime() 
-        var arr = [d, result[i].price];
+        var d =new Date(result[resu].timestamp).getTime() 
+        var arr = [d, result[resu].price];
         result2.push(arr);
-var arr2 = [d, result[i].quantity];
+var arr2 = [d, result[resu].quantity];
         result2vol.push(arr2);
     }
-}catch(err){console.log(err);}
     }
     var json = {poloBuyVol: result2vol, poloSellVol: result3vol, poloBuy: result2, poloSell: result3};
     res.json(json);
@@ -78,22 +69,16 @@ console.log(req.body.Input);
     // renders index.ejs
     var result2 = []
     var result3 = []
-	var len = 1000;
-	if (len > result.length){
-		len = result.length - 1;
-	}
-    for (var i = 0; i <= len; i++){
-try{
-        if (result[i].type == "SELL"){
-        var d =new Date(result[i].timestamp).getTime() 
-        var arr = [d, result[i].price, result[i].quantity];
+    for (var resu in result){
+        if (result[resu].type == "SELL"){
+        var d =new Date(result[resu].timestamp).getTime() 
+        var arr = [d, result[resu].price, result[resu].quantity];
         result3.push(arr);
     }else {
-        var d =new Date(result[i].timestamp).getTime() 
-        var arr = [d, result[i].price, result[i].quantity];
+        var d =new Date(result[resu].timestamp).getTime() 
+        var arr = [d, result[resu].price, result[resu].quantity];
         result2.push(arr);
     }
-}catch(err){console.log(err);}
     }
     //console.log(result2);
     dbs = [];
@@ -116,27 +101,21 @@ app.get('/', (req, res) => {
 MongoClient.connect("mongodb://localhost:27017/", (err, client) => {
   if (err) return console.log(err)
   db = client.db('trades') 
-  db.collection('TRADE-BINA--ETH--BTC').find().toArray((err, result) => {
+  db.collection('TRADE-PLNX--ETH--BTC').find().toArray((err, result) => {
     if (err) return console.log(err)
     // renders index.ejs
     var result2 = []
     var result3 = []
-	var len = 1000;
-	if (len > result.length){
-		len = result.length - 1;
-	}
-    for (var i = 0; i <= len; i++){
-try{
-        if (result[i].type == "SELL"){
-        var d =new Date(result[i].timestamp).getTime() 
-        var arr = [d, result[i].price, result[i].quantity];
+	for (var resu in result){
+        if (result[resu].type == "SELL"){
+        var d =new Date(result[resu].timestamp).getTime() 
+        var arr = [d, result[resu].price, result[resu].quantity];
 		result3.push(arr);
     }else {
-        var d =new Date(result[i].timestamp).getTime() 
-        var arr = [d, result[i].price, result[i].quantity];
+        var d =new Date(result[resu].timestamp).getTime() 
+        var arr = [d, result[resu].price, result[resu].quantity];
         result2.push(arr);
     }
-}catch(err){console.log(err);}
 	}
 	//console.log(result2);
    dbs = [];
@@ -150,7 +129,7 @@ dbsdo(coll, collInfos[col].name);
 }
 setTimeout(function(){
 
-    res.render('index.ejs', {name: "TRADE-BINA--ETH--BTC", auto: dbs, poloBuy: result2, poloSell: result3})
+    res.render('index.ejs', {name: "TRADE-PLNX--ETH--BTC", auto: dbs, poloBuy: result2, poloSell: result3})
 }, 2000); 
  })
     });
